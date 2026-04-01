@@ -1,0 +1,2 @@
+custom_navigation:
+  launch: "tiago_custom_nav2 navigation_orig.launch.py"
