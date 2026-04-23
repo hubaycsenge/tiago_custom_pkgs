@@ -28,6 +28,7 @@ find_package(pal_module_cmake)
 if(pal_module_cmake_FOUND)
    pal_register_modules(
       module/00_custom_navigation.yaml
+      module/00_custom_patrolling.yaml
    )
 endif()
 

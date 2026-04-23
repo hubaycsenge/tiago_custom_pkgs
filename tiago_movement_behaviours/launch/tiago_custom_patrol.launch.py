@@ -7,7 +7,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     default_waypoints_file = PathJoinSubstitution(
-        [FindPackageShare('tiago_movement_behaviours'), 'configs', 'goal_waypoints.yaml']
+        [FindPackageShare('tiago_movement_behaviours'), 'configs', 'patrol_south6th.yaml']
     )
 
     waypoints_file_arg = DeclareLaunchArgument(

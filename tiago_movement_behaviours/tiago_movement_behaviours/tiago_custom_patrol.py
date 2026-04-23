@@ -18,7 +18,7 @@ class NavActionClient(Node):
         default_config_path = str(
             Path(get_package_share_directory('tiago_movement_behaviours'))
             / 'configs'
-            / 'goal_waypoints.yaml'
+            / 'patrol_south6th.yaml'
         )
         self.declare_parameter('waypoints_file', default_config_path)
         self._waypoints_file = self.get_parameter('waypoints_file').value

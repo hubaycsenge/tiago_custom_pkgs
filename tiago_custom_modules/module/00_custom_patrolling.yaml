@@ -1,0 +1,2 @@
+custom_patrolling:
+  launch: "tiago_custom_nav2 navigation_custom.launch.py /home/pal/deployed_ws/tiago_movement_behaviours/share/tiago_movement_behaviours/configs/patrol_south6th.yaml"

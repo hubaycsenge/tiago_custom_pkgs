@@ -30,5 +30,11 @@ def generate_launch_description():
                     "use_sim_time": "false",
                 }.items()
             ),
+            Node(
+                package='tiago_audio_behaviours',
+                executable='tiago_nav_recov_sound',
+                name='tiago_nav_recov_sound',
+                output='screen'
+            ),
         ]),
     ])
