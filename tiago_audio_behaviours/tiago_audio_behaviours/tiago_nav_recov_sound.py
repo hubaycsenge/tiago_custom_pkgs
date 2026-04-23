@@ -9,6 +9,7 @@ import os
 import math
 import time
 from ament_index_python.packages import get_package_share_directory
+from nav2_msgs.action import NavigateToPose
 
 class NavRecoveryAudioAlertNode(Node):
     def __init__(self):
@@ -16,11 +17,15 @@ class NavRecoveryAudioAlertNode(Node):
 
         # --- Configuration Parameters ---
         self.declare_parameter('danger_distance_m', 0.5)
+        self.declare_parameter('danger_distance_perc', 0.3) # Percentage of scan points that must be too close to trigger
+        self.declare_parameter('recov_num_threshold', 3) # Number of recoveries that must be active to trigger
         self.declare_parameter('beep_cooldown_s', 3.0)
         self.declare_parameter('sound_file', 'attention1.mp3') # Change to your preferred file
         
         self.danger_distance_m = self.get_parameter('danger_distance_m').value
+        self.danger_distance_perc = self.get_parameter("danger_distance_perc").value
         self.beep_cooldown_s = self.get_parameter('beep_cooldown_s').value
+        self.recov_num_threshold = self.get_parameter('recov_num_threshold').value
         sound_file_name = self.get_parameter('sound_file').value
 
         # --- Audio File Setup ---
@@ -32,7 +37,9 @@ class NavRecoveryAudioAlertNode(Node):
             self.sound_file_path = ""
 
         # State variables
-        self.min_distance = float('inf')
+        self.distance_danger_crit = False
+        self.recov_crit = False
+        self.recov_num = None
         self.active_recoveries = set()
         self.last_beep_time = 0.0
         
@@ -48,50 +55,58 @@ class NavRecoveryAudioAlertNode(Node):
             '/scan',
             self.scan_callback,
             rclpy.qos.qos_profile_sensor_data)
-
-        self.bt_log_sub = self.create_subscription(
-            BehaviorTreeLog,
-            '/behavior_tree_log',
-            self.bt_log_callback,
-            10)
-
         # --- Timers ---
         # 1. Timer to evaluate distance and recovery state (runs at 2 Hz)
         self.eval_timer = self.create_timer(0.5, self.evaluate_and_warn)
         # 2. Timer to stream audio chunks (runs at 10 Hz)
         self.audio_timer = self.create_timer(0.1, self.audio_stream_callback)
         
-        self.get_logger().info(f"Audio Alert Node started. Danger threshold: {self.danger_distance_m}m")
+        self.get_logger().info(f"Audio Alert Node started. Danger threshold: {self.danger_distance_m} m ; {self.recov_num_threshold} recoveries")
+
+        feedback_msg_type = NavigateToPose.Impl.FeedbackMessage
+        
+        # Subscribe directly to the action's feedback topic
+        self.subscription = self.create_subscription(
+            feedback_msg_type,
+            '/navigate_to_pose/_action/feedback',
+            self.feedback_callback,
+            10 # QoS profile depth
+        )
+        self.get_logger().info("Listening to Nav2 feedback...")
+    
+    def feedback_callback(self, msg):
+        # The actual feedback data is nested inside the 'feedback' attribute 
+        # of the wrapper message.
+        actual_feedback = msg.feedback
+        
+        self.recov_num = actual_feedback.number_of_recoveries
+        if self.recov_num >= self.recov_num_threshold:
+            self.recov_crit = True
+        else:
+            self.recov_crit = False
 
     def scan_callback(self, msg):
         valid_ranges = [r for r in msg.ranges if msg.range_min < r < msg.range_max and not math.isinf(r) and not math.isnan(r)]
         if valid_ranges:
-            self.min_distance = min(valid_ranges)
-        else:
-            self.min_distance = float('inf')
+            num_valid = len(valid_ranges)
+            num_too_close = sum(1 for r in valid_ranges if r < self.danger_distance_m)
+            self.perc = num_too_close/num_valid
+            #self.get_logger().info(f'Num too close: {num_too_close}, num valid: {num_valid} percentage: {perc} danger dist perc: {self.danger_distance_perc}')
+            if self.perc > self.danger_distance_perc:
+                self.distance_danger_crit = True
+            else:
+                self.distance_danger_crit = False
 
-    def bt_log_callback(self, msg):
-        recovery_keywords = ['Recovery', 'Spin', 'BackUp', 'Wait']
 
-        for event in msg.event_log:
-            is_recovery_node = any(keyword in event.node_name for keyword in recovery_keywords)
-            
-            if is_recovery_node:
-                if event.current_status == 'RUNNING':
-                    self.active_recoveries.add(event.node_name)
-                elif event.current_status in ['SUCCESS', 'FAILURE', 'IDLE']:
-                    self.active_recoveries.discard(event.node_name)
 
     def evaluate_and_warn(self):
-        is_recovering = len(self.active_recoveries) > 0
-        is_too_close = self.min_distance < self.danger_distance_m
-
-        if is_recovering and is_too_close:
+        self.get_logger().info(f'Dist percentages: {self.perc}; recoveries: {self.recov_num}')
+        if self.distance_danger_crit and self.recov_crit:
+            self.get_logger().warn('BEEEEP BEEP')
             current_time = time.time()
             
             # Trigger audio if cooldown passed AND audio isn't already playing
             if (current_time - self.last_beep_time) > self.beep_cooldown_s and self.file_stream is None:
-                self.get_logger().warn(f"Recovering near obstacle ({self.min_distance:.2f}m). Publishing audio alert!")
                 self.start_audio()
                 self.last_beep_time = current_time
 
