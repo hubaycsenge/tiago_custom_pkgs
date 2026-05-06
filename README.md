@@ -22,6 +22,5 @@ The comprehensive documentation has been split into several focused guides:
 * [Connection](documentation/Connection.md) (SSH, SSHFS, Docker)
 * [Webcontrol](documentation/Connection.md) (Webcontrol startup, with or without docker)
 * [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
-* [Custom Packages](documentation/Custom_packages.md) (Audio, Movement behaviours, and Nav2 documentation)
 * [Contributing](documentation/Contributing.md) (Deploy new ROS2 nodes, Pal modules)
 
