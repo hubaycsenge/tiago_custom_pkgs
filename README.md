@@ -1,5 +1,15 @@
 # Repository for custom ROS2 packages for Tiago PMB2 base
 
+## Know-how
+
+The comprehensive documentation has been split into several focused guides:
+
+* [Basic operation](documentation/Basic_functions.md) (Bringup, Turnoff,Charging, Teleoperation, Pal Module Operations)
+* [Connection](documentation/Connection.md) (SSH, SSHFS, Docker)
+* [Webcontrol](documentation/Connection.md) (Webcontrol startup, with or without docker)
+* [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
+* [Contributing](documentation/Contributing.md) (Deploy new ROS2 nodes, Pal modules)
+
 ## packages 
 
 ### tiago_custom_nav2
@@ -13,16 +23,6 @@ Holds custom PMB2 / TIAGo module and configuration integrations, such as `00_cus
 
 ### tiago_movement_behaviours
 Contains automated routines and behaviors for robot movement. Includes configurable YAML waypoints (for dstinct floor layouts/departments) and scripts to drive the TIAGo robot through predefined navigation paths autonomously, such as patrol tasks.
-
-## Know-how
-
-The comprehensive documentation has been split into several focused guides:
-
-* [Basic operation](documentation/Basic_functions.md) (Bringup, Turnoff,Charging, Teleoperation, Pal Module Operations)
-* [Connection](documentation/Connection.md) (SSH, SSHFS, Docker)
-* [Webcontrol](documentation/Connection.md) (Webcontrol startup, with or without docker)
-* [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
-* [Contributing](documentation/Contributing.md) (Deploy new ROS2 nodes, Pal modules)
 
 ## Official Documentation
 
