@@ -6,7 +6,7 @@ The comprehensive documentation has been split into several focused guides:
 
 * [Basic operation](documentation/Basic_functions.md) (Bringup, Turnoff,Charging, Teleoperation, Pal Module Operations)
 * [Connection](documentation/Connection.md) (SSH, SSHFS, Docker)
-* [Webcontrol](documentation/Connection.md) (Webcontrol startup, with or without docker)
+* [Webcontrol](documentation/Webcontrol.md) (Webcontrol startup, with or without docker)
 * [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
 * [Contributing](documentation/Contributing.md) (Deploy new ROS2 nodes, Pal modules)
 
