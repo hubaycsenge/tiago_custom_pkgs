@@ -18,7 +18,7 @@ Contains automated routines and behaviors for robot movement. Includes configura
 
 The comprehensive documentation has been split into several focused guides:
 
-* [Basic operation](documentation/Basic_functions.md) (Bringup, Turnoff,Charging, Teleoperation, pal modules)
+* [Basic operation](documentation/Basic_functions.md) (Bringup, Turnoff,Charging, Teleoperation, Pal Module Operations)
 * [Connection](documentation/Connection.md) (SSH, SSHFS, Docker)
 * [Webcontrol](documentation/Connection.md) (Webcontrol startup, with or without docker)
 * [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
