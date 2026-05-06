@@ -29,5 +29,4 @@ Useful for easier file transfer.
   ```bash
   sshfs pal@10.42.0.1:/ /root/pal_drive
   ```
-  **(password: `pal`)**
 - This opens the robot's whole file system in a new folder at `/root/pal_drive`.
