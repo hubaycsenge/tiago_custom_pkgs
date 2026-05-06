@@ -20,5 +20,11 @@
 2. Press `start` on the controller.
 3. Push the upper right trigger while teleoperating.
 
+### Managing modules
 
-
+- SSH to `pal@10.42.0.1` 
+- functions:
+        - check available modules: pal module list *MODULE_NAME*
+        - stop module operation: pal module stop *MODULE_NAME*
+        - start module operation: pal module start *MODULE_NAME*
+        - restart module operation: pal module restart *MODULE_NAME*
