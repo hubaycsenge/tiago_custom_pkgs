@@ -24,3 +24,10 @@ The comprehensive documentation has been split into several focused guides:
 * [Navigation and Mapping](documentation/Nav_and_mapping.md) (Localization, SLAM, Map Switching, and RViz)
 * [Contributing](documentation/Contributing.md) (Deploy new ROS2 nodes, Pal modules)
 
+## Official Documentation
+
+For further reference regarding the PMB2 base and the robot's software architecture, please consult the official documents:
+
+* [PMB2 Handbook](https://docs.pal-robotics.com/tiago-base/handbook.html#)
+* [PAL SDK (Robot's Custom Software System)](https://docs.pal-robotics.com/sdk/23.12/)
+
